@@ -2,6 +2,7 @@ package main;
 
 import java.awt.Component;
 import java.util.Calendar;
+import java.util.Date;
 
 public class PanelDate extends javax.swing.JLayeredPane {
 
@@ -33,15 +34,25 @@ public class PanelDate extends javax.swing.JLayeredPane {
         calendar.set(Calendar.DATE, 1);
         int startDay = calendar.get(Calendar.DAY_OF_WEEK) - 1;  //  get day of week -1 to index
         calendar.add(Calendar.DATE, -startDay);
+        ToDay toDay = getToDay();
         for (Component com : getComponents()) {
             Cell cell = (Cell) com;
             if (!cell.isTitle()) {
                 cell.setText(calendar.get(Calendar.DATE) + "");
                 cell.setDate(calendar.getTime());
                 cell.currentMonth(calendar.get(Calendar.MONTH) == month - 1);
+                if (toDay.isToDay(new ToDay(calendar.get(Calendar.DATE), calendar.get(Calendar.MONTH) + 1, calendar.get(Calendar.YEAR)))) {
+                    cell.setAsToDay();
+                }
                 calendar.add(Calendar.DATE, 1); //  up 1 day
             }
         }
+    }
+
+    private ToDay getToDay() {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(new Date());
+        return new ToDay(calendar.get(Calendar.DATE), calendar.get(Calendar.MONTH) + 1, calendar.get(Calendar.YEAR));
     }
 
     @SuppressWarnings("unchecked")

@@ -14,6 +14,26 @@ public class CalendarCustom extends javax.swing.JPanel {
         initComponents();
         thisMonth();
         slide.show(new PanelDate(5, 2021), PanelSlide.AnimateType.TO_RIGHT);
+        showMonthYear();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                while (true) {
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+                        System.err.println(e);
+                    }
+                    Date date = new Date();
+                    SimpleDateFormat tf = new SimpleDateFormat("h:mm:ss aa");
+                    SimpleDateFormat df = new SimpleDateFormat("EEEE, dd/MM-yyyy");
+                    String time = tf.format(date);
+                    lbTime.setText(time.split(" ")[0]);
+                    lbType.setText(time.split(" ")[1]);
+                    lbDate.setText(df.format(date));
+                }
+            }
+        }).start();
     }
 
     @SuppressWarnings("unchecked")
@@ -23,6 +43,9 @@ public class CalendarCustom extends javax.swing.JPanel {
         slide = new swing.PanelSlide();
         jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
+        lbTime = new javax.swing.JLabel();
+        lbType = new javax.swing.JLabel();
+        lbDate = new javax.swing.JLabel();
         jLayeredPane1 = new javax.swing.JLayeredPane();
         cmdBack = new javax.swing.JButton();
         lbMonthYear = new javax.swing.JLabel();
@@ -55,8 +78,22 @@ public class CalendarCustom extends javax.swing.JPanel {
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
+            .addGap(0, 391, Short.MAX_VALUE)
         );
+
+        lbTime.setFont(new java.awt.Font("sansserif", 1, 48)); // NOI18N
+        lbTime.setForeground(new java.awt.Color(201, 201, 201));
+        lbTime.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        lbTime.setText("9:32:00");
+
+        lbType.setFont(new java.awt.Font("sansserif", 1, 25)); // NOI18N
+        lbType.setForeground(new java.awt.Color(201, 201, 201));
+        lbType.setText("PM");
+
+        lbDate.setFont(new java.awt.Font("sansserif", 0, 18)); // NOI18N
+        lbDate.setForeground(new java.awt.Color(201, 201, 201));
+        lbDate.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lbDate.setText("Sunday, 30/05/2021");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -64,13 +101,28 @@ public class CalendarCustom extends javax.swing.JPanel {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 261, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(lbTime, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(lbType, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(lbDate, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(12, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lbTime, javax.swing.GroupLayout.PREFERRED_SIZE, 69, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lbType))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(lbDate)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         cmdBack.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/back.png"))); // NOI18N
@@ -110,7 +162,7 @@ public class CalendarCustom extends javax.swing.JPanel {
                 .addContainerGap()
                 .addComponent(cmdBack, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(lbMonthYear, javax.swing.GroupLayout.DEFAULT_SIZE, 286, Short.MAX_VALUE)
+                .addComponent(lbMonthYear, javax.swing.GroupLayout.DEFAULT_SIZE, 264, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(cmdNext, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -175,7 +227,7 @@ public class CalendarCustom extends javax.swing.JPanel {
     private void thisMonth() {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(new Date());   //  today
-        month = calendar.get(Calendar.MONTH);
+        month = calendar.get(Calendar.MONTH) + 1;
         year = calendar.get(Calendar.YEAR);
     }
 
@@ -194,7 +246,10 @@ public class CalendarCustom extends javax.swing.JPanel {
     private javax.swing.JLayeredPane jLayeredPane1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JLabel lbDate;
     private javax.swing.JLabel lbMonthYear;
+    private javax.swing.JLabel lbTime;
+    private javax.swing.JLabel lbType;
     private swing.PanelSlide slide;
     // End of variables declaration//GEN-END:variables
 }
